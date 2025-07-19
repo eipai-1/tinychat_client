@@ -1,5 +1,12 @@
-#include "app_controller.h"
-#include "login_window.h"
+#include "core/app_controller.h"
+#include "ui/login_window.h"
+
+using LoginWindow = tcc::ui::LoginWindow;
+using MainWindow = tcc::ui::MainWindow;
+using RegisterWindow = tcc::ui::RegisterWindow;
+
+namespace tcc{
+namespace core{
 
 AppController::AppController(QObject *parent)
     : QObject{parent}
@@ -69,4 +76,7 @@ void AppController::onRegisterFinished()
     register_window_.reset();
 
     showLoginWindow();
+}
+
+}
 }

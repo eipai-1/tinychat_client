@@ -7,6 +7,9 @@ namespace Ui {
 class RegisterWindow;
 }
 
+namespace tcc{
+namespace ui{
+
 class RegisterWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,4 +29,6 @@ private:
     Ui::RegisterWindow *ui;
 };
 
+}
+}
 #endif // REGISTER_WINDOW_H

@@ -1,5 +1,8 @@
-#include "login_window.h"
+#include "ui/login_window.h"
 #include "ui_login_window.h"
+
+namespace tcc{
+namespace ui{
 
 LoginWindow::LoginWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,4 +28,7 @@ void LoginWindow::onLogin()
 void LoginWindow::onRegister()
 {
     emit registerRequest();
+}
+
+}
 }

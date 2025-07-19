@@ -3,10 +3,12 @@
 
 #include <QObject>
 
-#include "main_window.h"
-#include "login_window.h"
-#include "register_window.h"
+#include "ui/main_window.h"
+#include "ui/login_window.h"
+#include "ui/register_window.h"
 
+namespace tcc{
+namespace core {
 struct QObjectDeleter {
     void operator() (QObject *obj) {
         if (obj) {
@@ -23,9 +25,9 @@ public:
     void run();
 
 private:
-    std::unique_ptr<MainWindow, QObjectDeleter> main_window_;
-    std::unique_ptr<LoginWindow, QObjectDeleter> login_window_;
-    std::unique_ptr<RegisterWindow, QObjectDeleter> register_window_;
+    std::unique_ptr<tcc::ui::MainWindow, QObjectDeleter> main_window_;
+    std::unique_ptr<tcc::ui::LoginWindow, QObjectDeleter> login_window_;
+    std::unique_ptr<tcc::ui::RegisterWindow, QObjectDeleter> register_window_;
 
     void showLoginWindow();
     void showMainWindow();
@@ -39,5 +41,6 @@ private slots:
 
 signals:
 };
-
+}
+}
 #endif // APP_CONTROLLER_H

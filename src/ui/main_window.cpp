@@ -1,5 +1,8 @@
-#include "main_window.h"
+#include "ui/main_window.h"
 #include "ui_main_window.h"
+
+namespace tcc{
+namespace ui{
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,4 +21,7 @@ MainWindow::~MainWindow()
 void MainWindow::onLogout()
 {
     emit logoutRequest();
+}
+
+}
 }

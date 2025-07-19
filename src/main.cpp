@@ -2,7 +2,7 @@
 #include <QLocale>
 #include <QTranslator>
 
-#include "app_controller.h"
+#include "core/app_controller.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    AppController controller;
+    tcc::core::AppController controller;
     controller.run();
 
     return a.exec();

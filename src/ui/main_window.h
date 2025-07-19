@@ -9,6 +9,10 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+
+namespace tcc {
+namespace ui{
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,4 +30,7 @@ signals:
 private:
     Ui::MainWindow *ui;
 };
+
+}
+}
 #endif // MAIN_WINDOW_H

@@ -7,6 +7,9 @@ namespace Ui {
 class LoginWindow;
 }
 
+namespace tcc{
+namespace ui{
+
 class LoginWindow : public QMainWindow
 {
     Q_OBJECT
@@ -27,4 +30,6 @@ private:
     Ui::LoginWindow *ui;
 };
 
+}
+}
 #endif // LOGIN_WINDOW_H
