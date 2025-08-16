@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "model/auth_model.h"
+
 namespace Ui {
 class LoginWindow;
 }
@@ -21,9 +23,10 @@ public:
 private slots:
     void onLogin();
     void onRegister();
+    void onLoginSuccess(tcc::model::LoginResp resp);
 
 signals:
-    void loginRequest();
+    void loginSuccess(tcc::model::LoginResp resp);
     void registerRequest();
 
 private:

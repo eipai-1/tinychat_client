@@ -2,10 +2,10 @@
 #include <QLocale>
 #include <QTranslator>
 
-#include "core/app_controller.h"
+#include "model/room.h"
+#include "core/tinychat_client.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     QTranslator translator;
@@ -18,8 +18,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    tcc::core::AppController controller;
-    controller.run();
+    qRegisterMetaType<tcc::model::Room>();
+
+    tcc::core::TinychatClient client;
+    client.run();
 
     return a.exec();
 }

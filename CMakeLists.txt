@@ -9,8 +9,16 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS
+  Widgets
+  LinguistTools
+  Network
+)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
+  Widgets
+  LinguistTools
+  Network
+)
 
 set(TS_FILES assets/translations/tinychat_client_zh_CN.ts)
 
@@ -30,6 +38,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/core/app_controller.h src/core/app_controller.cpp
         src/ui/register_window.h src/ui/register_window.cpp src/ui/register_window.ui
         src/assets.qrc
+        src/net/net_manager.h src/net/net_manager.cpp
+        src/model/auth_model.h src/model/auth_model.cpp
+        src/utils/deleter.h
+        src/core/tinychat_client.h src/core/tinychat_client.cpp
+        src/utils/types.h
+        src/model/user.h
+
+        src/model/room.h
+        src/model/room_model.h src/model/room_model.cpp
+        src/model/room_delegate.h src/model/room_delegate.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET tinychat_client APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -53,7 +71,10 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(tinychat_client PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(tinychat_client PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets
+  Qt${QT_VERSION_MAJOR}::Network
+)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

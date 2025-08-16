@@ -3,19 +3,14 @@
 
 #include <QObject>
 
-#include "ui/main_window.h"
+#include "model/auth_model.h"
 #include "ui/login_window.h"
+#include "ui/main_window.h"
 #include "ui/register_window.h"
+#include "utils/deleter.h"
 
 namespace tcc{
 namespace core {
-struct QObjectDeleter {
-    void operator() (QObject *obj) {
-        if (obj) {
-            obj->deleteLater();
-        }
-    }
-};
 
 class AppController : public QObject
 {
@@ -25,22 +20,23 @@ public:
     void run();
 
 private:
-    std::unique_ptr<tcc::ui::MainWindow, QObjectDeleter> main_window_;
-    std::unique_ptr<tcc::ui::LoginWindow, QObjectDeleter> login_window_;
-    std::unique_ptr<tcc::ui::RegisterWindow, QObjectDeleter> register_window_;
+    std::unique_ptr<tcc::ui::MainWindow, tcc::utils::QObjectDeleter> main_window_;
+    std::unique_ptr<tcc::ui::LoginWindow, tcc::utils::QObjectDeleter> login_window_;
+    std::unique_ptr<tcc::ui::RegisterWindow, tcc::utils::QObjectDeleter> register_window_;
 
     void showLoginWindow();
     void showMainWindow();
     void showRegisterWindow();
 
 private slots:
-    void onLogin();
+    void onLogin(tcc::model::LoginResp resp);
     void onLogout();
     void onRegister();
     void onRegisterFinished();
 
 signals:
 };
+
 }
 }
 #endif // APP_CONTROLLER_H
