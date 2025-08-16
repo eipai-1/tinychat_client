@@ -1,5 +1,8 @@
-#include "register_window.h"
+#include "ui/register_window.h"
 #include "ui_register_window.h"
+
+namespace tcc{
+namespace ui{
 
 RegisterWindow::RegisterWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,4 +27,7 @@ void RegisterWindow::onRegister()
 void RegisterWindow::onCancel()
 {
     emit registerFinished();
+}
+
+}
 }

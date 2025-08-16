@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LoginWindow</class>
- <widget class="QMainWindow" name="LoginWindow">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>298</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QPushButton" name="login_button">
-        <property name="text">
-         <string>登录</string>
-        </property>
-       </widget>
+       <widget class="QListView" name="room_list_view_"/>
       </item>
       <item>
-       <widget class="QPushButton" name="register_button">
+       <widget class="QLabel" name="username_label">
         <property name="text">
-         <string>注册</string>
+         <string>TextLabel</string>
         </property>
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2"/>
     </item>
    </layout>
   </widget>
