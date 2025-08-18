@@ -8,7 +8,7 @@ QVariant RoomModel::data(const QModelIndex &index, int role) const {
 
     const Room &room = rooms_.at(index.row());
 
-    if (role == RoomRole) {
+    if (role == static_cast<int>(Role::Complete)) {
         return QVariant::fromValue(room);
     }
 

@@ -9,14 +9,15 @@
 #include "ui/register_window.h"
 #include "utils/deleter.h"
 
-namespace tcc{
+#include "model/user.h"
+
+namespace tcc {
 namespace core {
 
-class AppController : public QObject
-{
+class AppController : public QObject {
     Q_OBJECT
 public:
-    explicit AppController(QObject *parent = nullptr);
+    explicit AppController(QObject* parent = nullptr);
     void run();
 
 private:
@@ -25,7 +26,7 @@ private:
     std::unique_ptr<tcc::ui::RegisterWindow, tcc::utils::QObjectDeleter> register_window_;
 
     void showLoginWindow();
-    void showMainWindow();
+    void showMainWindow(const tcc::model::User& user);
     void showRegisterWindow();
 
 private slots:
@@ -37,6 +38,6 @@ private slots:
 signals:
 };
 
-}
-}
-#endif // APP_CONTROLLER_H
+}  // namespace core
+}  // namespace tcc
+#endif  // APP_CONTROLLER_H

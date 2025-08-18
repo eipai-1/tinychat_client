@@ -24,7 +24,7 @@ void RoomDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         painter->fillRect(option.rect, QColor(240, 248, 255));  // AliceBlue
     }
 
-    Room room = index.data(RoomModel::Role::RoomRole).value<Room>();
+    Room room = index.data(static_cast<int>(RoomModel::Role::Complete)).value<Room>();
 
     // painter->setPen(option.state & QStyle::State_Selected ?
     // option.palette.highlightedText().color()

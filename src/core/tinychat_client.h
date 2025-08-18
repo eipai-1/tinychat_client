@@ -6,18 +6,16 @@
 namespace tcc {
 namespace core {
 
-class TinychatClient
-{
+class TinychatClient {
 public:
     TinychatClient();
     void run();
 
 private:
     AppController controller_;
-
 };
 
-} // namespace core
-} // namespace tcc
+}  // namespace core
+}  // namespace tcc
 
-#endif // TINYCHAT_CLIENT_H
+#endif  // TINYCHAT_CLIENT_H

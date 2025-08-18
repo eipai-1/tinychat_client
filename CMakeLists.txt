@@ -13,11 +13,13 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS
   Widgets
   LinguistTools
   Network
+  WebSockets
 )
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
   Widgets
   LinguistTools
   Network
+  WebSockets
 )
 
 set(TS_FILES assets/translations/tinychat_client_zh_CN.ts)
@@ -48,6 +50,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/model/room.h
         src/model/room_model.h src/model/room_model.cpp
         src/model/room_delegate.h src/model/room_delegate.cpp
+        src/model/message_model.h src/model/message_model.cpp
+        src/model/message.h
+        src/model/message_delegate.h src/model/message_delegate.cpp
+        src/utils/enums.h
+        src/service/chat_room_manager.h src/service/chat_room_manager.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET tinychat_client APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
