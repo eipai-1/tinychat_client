@@ -7,10 +7,8 @@ using LoginRequest = tcc::model::LoginRequest;
 using LoginResp = tcc::model::LoginResp;
 using NetManager = tcc::net::NetManager;
 
-
 namespace tcc{
 namespace ui{
-
 LoginWindow::LoginWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::LoginWindow)

@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/chat_box_widget.qml</file>
-        <file>images/users/avatar/default_avatar.png</file>
         <file>icons/more-options-icon.jpg</file>
     </qresource>
 </RCC>

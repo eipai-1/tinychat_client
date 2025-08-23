@@ -24,6 +24,12 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
   QuickWidgets
 )
 
+option(RELEASE_BUILD "Enable release build macros" OFF)
+
+if(RELEASE_BUILD)
+    target_compile_definitions(tinychat_client PRIVATE RELEASE_BUILD)
+endif()
+
 set(TS_FILES assets/translations/tinychat_client_zh_CN.ts)
 
 set(PROJECT_SOURCES

@@ -1,4 +1,5 @@
 #include <memory>
+#include <map>
 
 #include <QNetworkRequest>
 #include <QJsonObject>
@@ -24,10 +25,9 @@ namespace net {
 
 std::unique_ptr<NetManager> NetManager::instance_ptr_(nullptr);
 
-NetManager::NetManager(QObject* parent)
-    : QObject{parent}, server_url_("http://localhost:8080") {
+NetManager::NetManager(QObject* parent) : QObject{parent}, server_url_("http://localhost:8080") {
     // 设置this为父对象 自动管理内存
-    //websocket_client_ = new WebSocketClient(QUrl("ws://localhost:8080"), cur_user_id, this);
+    // websocket_client_ = new WebSocketClient(QUrl("ws://localhost:8080"), cur_user_id, this);
     access_manager_ = new QNetworkAccessManager(this);
     websocket_client_ = new WebSocketClient(this);
 }
@@ -161,8 +161,42 @@ void NetManager::fetch_chat_messages(u64 room_id, int limit, u64 before_id) {
     });
 }
 
-void NetManager::connetWS(const QUrl& server_url, u64 user_id, const QString& token)
-{
+void NetManager::fetchResouce(ResType type, const QString& res_url, const QString& savePath) {
+    QString path = "/assets" + res_url;
+    qDebug() << "fetcing:" << path;
+    QUrl url(server_url_);
+    url.setPath(path);
+    QNetworkRequest req(url);
+    req.setRawHeader("Authorization", token_.toLocal8Bit());
+    QNetworkReply* reply(access_manager_->get(req));
+
+    file_ = new QFile(savePath, this);
+    if (!file_->open(QIODevice::WriteOnly)) {
+        qWarning() << "Could not open file for writing. savePath:"
+                   << savePath << " ErrorMsg:" << file_->errorString();
+        reply->abort();
+        delete file_;
+        file_ = nullptr;
+        return;
+    }
+
+    connect(reply, &QNetworkReply::finished, this, [this, type, reply]() {
+        if (file_) {
+            file_->write(reply->readAll());
+            switch (type) {
+                case ResType::CurUserAvatar:
+                    qDebug() << "avatar fetched";
+                    emit curUserAvatarFetched();
+                    break;
+                default:
+                    qWarning() << "Unknown ResType in fetchResource";
+            }
+        }
+        reply->deleteLater();
+    });
+}
+
+void NetManager::connetWS(const QUrl& server_url, u64 user_id, const QString& token) {
     websocket_client_->connect(user_id, token);
 }
 

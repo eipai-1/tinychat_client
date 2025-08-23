@@ -25,7 +25,7 @@ ListView {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 40
                 height: 40
-                source: "qrc:/images/users/avatar/default_avatar.png"
+                source: "qrc:/icons/default_avatar.png"
             }
 
             Rectangle {

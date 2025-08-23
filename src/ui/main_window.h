@@ -40,6 +40,7 @@ private slots:
     void onQueriedRooms(std::vector<tcc::model::Room> rooms);
     void onMessagesFetched(std::vector<tcc::model::Message> msgs);
     void onMsgSendRequired(const QString& text);
+    void onCurUserAvatarFetched();
 
 signals:
     void logoutRequest();
@@ -53,6 +54,8 @@ private:
     model::MessageDelegate* message_delegate_;
     service::ChatRoomManager* chat_room_mgr_;
     QString test_text;
+
+    static constexpr const char* CUR_USER_AVATAR_PATH = "/assets/images/users/avatar/";
 };
 
 }  // namespace ui

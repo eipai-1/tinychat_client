@@ -1,12 +1,22 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
+#include <QApplication>
+
 #include <string_view>
 #include <map>
 
 #include <QString>
 
 namespace tcc::utils {
+inline QString working_dir() {
+#ifdef RELEASE_BUILD
+    return QApplication::applicationDirPath();
+#else
+    return "D:\\1\\program\\Qt\\QtProj\\tinychat_client\\";
+#endif
+}
+
 enum class WSType : int {
     PrivateMsg = 1,
     GroupMsg = 2,

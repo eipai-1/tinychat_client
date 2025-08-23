@@ -5,6 +5,7 @@
 #include <QAbstractItemView>
 #include <QUrl>
 #include <QQmlContext>
+#include <QPixmap>
 
 #include "net/net_manager.h"
 #include "model/user.h"
@@ -13,6 +14,7 @@
 #include "model/message_model.h"
 #include "model/message.h"
 #include "ui/chat_msg_edit.h"
+#include "utils/enums.h"
 
 using NetManager = tcc::net::NetManager;
 
@@ -29,7 +31,6 @@ using ChatRoomManager = tcc::service::ChatRoomManager;
 
 namespace tcc {
 namespace ui {
-
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {}
 
 MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
@@ -72,8 +73,18 @@ MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
     ui->chat_box_widget_->setSource(QUrl("qrc:/qml/chat_box_widget.qml"));
     ui->chat_box_widget_->show();
 
+    connect(&NetManager::get(), &NetManager::curUserAvatarFetched, this,
+            &MainWindow::onCurUserAvatarFetched);
 
+    // current user avatar request path
+    QString cur_user_avatar_rp = "/images/users/avatar/" + QString::number(cur_user_.id) + ".jpg";
+
+    // current user avatar save path
+    QString cur_user_avatar_sp =
+        utils::working_dir() + CUR_USER_AVATAR_PATH + QString::number(cur_user_.id) + ".jpg";
     NetManager::get().query_rooms();
+    NetManager::get().fetchResouce(NetManager::ResType::CurUserAvatar, cur_user_avatar_rp,
+                                   cur_user_avatar_sp);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -89,6 +100,13 @@ void MainWindow::onMsgSendRequired(const QString& text) {
     qDebug() << "msg send required:" << text;
     NetManager::get().websocketClient()->sendChatMsg(
         chat_room_mgr_->curRoomId(), chat_room_mgr_->curRoomType() == Room::Type::Private, text);
+}
+
+void MainWindow::onCurUserAvatarFetched() {
+    QString save_path =
+        utils::working_dir() + CUR_USER_AVATAR_PATH + QString::number(cur_user_.id) + ".jpg";
+    ui->avatar_label_->setPixmap(
+        QPixmap(save_path).scaled(45, 45, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 }
 
 void MainWindow::onMessagesFetched(std::vector<model::Message> msgs) {
