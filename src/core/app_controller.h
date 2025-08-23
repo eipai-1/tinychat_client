@@ -28,12 +28,14 @@ private:
     void showLoginWindow();
     void showMainWindow(const tcc::model::User& user);
     void showRegisterWindow();
+    model::LoginResp login_resp_;
 
 private slots:
-    void onLogin(tcc::model::LoginResp resp);
+    void onLoggedIn(tcc::model::LoginResp resp);
     void onLogout();
     void onRegister();
     void onRegisterFinished();
+    void onWSConnected();
 
 signals:
 };

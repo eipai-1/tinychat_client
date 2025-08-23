@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 #include <QUrlQuery>
+#include <QUrl>
 
 #include "model/auth_model.h"
 #include "model/message.h"
@@ -23,9 +24,12 @@ namespace net {
 
 std::unique_ptr<NetManager> NetManager::instance_ptr_(nullptr);
 
-NetManager::NetManager(QObject* parent) : QObject{parent}, server_url_("http://localhost:8080") {
+NetManager::NetManager(QObject* parent)
+    : QObject{parent}, server_url_("http://localhost:8080") {
     // 设置this为父对象 自动管理内存
+    //websocket_client_ = new WebSocketClient(QUrl("ws://localhost:8080"), cur_user_id, this);
     access_manager_ = new QNetworkAccessManager(this);
+    websocket_client_ = new WebSocketClient(this);
 }
 
 void NetManager::login(const LoginRequest& login_req) {
@@ -122,7 +126,7 @@ void NetManager::fetch_chat_messages(u64 room_id, int limit, u64 before_id) {
     // 3. 将 path 和 query 组合到 URL 上
     QUrl url(server_url_);
     url.setPath(path);
-    url.setQuery(query); // 使用 setQuery 而不是自己拼接 '?' 和 '&'
+    url.setQuery(query);  // 使用 setQuery 而不是自己拼接 '?' 和 '&'
 
     QNetworkRequest req(url);
     req.setRawHeader("Authorization", token_.toLocal8Bit());
@@ -155,6 +159,11 @@ void NetManager::fetch_chat_messages(u64 room_id, int limit, u64 before_id) {
 
         reply->deleteLater();
     });
+}
+
+void NetManager::connetWS(const QUrl& server_url, u64 user_id, const QString& token)
+{
+    websocket_client_->connect(user_id, token);
 }
 
 }  // namespace net

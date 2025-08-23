@@ -12,6 +12,7 @@
 #include "model/auth_model.h"
 #include "model/room.h"
 #include "model/message.h"
+#include "net/websocket_client.h"
 
 namespace tcc {
 namespace net {
@@ -33,13 +34,15 @@ public:
     void query_rooms();
     // 正常id不可能为0
     void fetch_chat_messages(u64 room_id, int limit, u64 before_id = U64_MAX);
+    WebSocketClient* websocketClient() const { return websocket_client_; }
+    void connetWS(const QUrl& server_url, u64 user_id, const QString& token);
 
 private:
     explicit NetManager(QObject* parent = nullptr);
     QNetworkAccessManager* access_manager_;
     QUrl server_url_;
     QString token_;
-
+    WebSocketClient* websocket_client_;
     static std::unique_ptr<NetManager> instance_ptr_;
 
 signals:

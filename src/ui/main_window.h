@@ -39,6 +39,7 @@ private slots:
     void onLogout();
     void onQueriedRooms(std::vector<tcc::model::Room> rooms);
     void onMessagesFetched(std::vector<tcc::model::Message> msgs);
+    void onMsgSendRequired(const QString& text);
 
 signals:
     void logoutRequest();
@@ -51,6 +52,7 @@ private:
     model::MessageModel* message_model_;
     model::MessageDelegate* message_delegate_;
     service::ChatRoomManager* chat_room_mgr_;
+    QString test_text;
 };
 
 }  // namespace ui

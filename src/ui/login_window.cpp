@@ -25,6 +25,9 @@ LoginWindow::LoginWindow(QWidget *parent)
 
     // 登录成功时发出登录成功信号
     connect(&NetManager::get(), &NetManager::loginResp, this, &LoginWindow::onLoginSuccess);
+
+    ui->pwd_edit->setText(QString("Alice111"));
+    ui->username_edit->setText(QString("Alice"));
 }
 
 LoginWindow::~LoginWindow()

@@ -14,12 +14,14 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS
   LinguistTools
   Network
   WebSockets
+  QuickWidgets
 )
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
   Widgets
   LinguistTools
   Network
   WebSockets
+  QuickWidgets
 )
 
 set(TS_FILES assets/translations/tinychat_client_zh_CN.ts)
@@ -39,7 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/ui/login_window.h src/ui/login_window.cpp src/ui/login_window.ui
         src/core/app_controller.h src/core/app_controller.cpp
         src/ui/register_window.h src/ui/register_window.cpp src/ui/register_window.ui
-        src/assets.qrc
+        assets/assets.qrc
         src/net/net_manager.h src/net/net_manager.cpp
         src/model/auth_model.h src/model/auth_model.cpp
         src/utils/deleter.h
@@ -55,6 +57,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/model/message_delegate.h src/model/message_delegate.cpp
         src/utils/enums.h
         src/service/chat_room_manager.h src/service/chat_room_manager.cpp
+        src/net/websocket_client.h src/net/websocket_client.cpp
+        src/ui/chat_msg_edit.h src/ui/chat_msg_edit.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET tinychat_client APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -81,6 +85,8 @@ endif()
 target_link_libraries(tinychat_client PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets
   Qt${QT_VERSION_MAJOR}::Network
+  Qt${QT_VERSION_MAJOR}::QuickWidgets
+  Qt${QT_VERSION_MAJOR}::WebSockets
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

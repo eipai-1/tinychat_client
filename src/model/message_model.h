@@ -17,6 +17,7 @@ public:
     enum class Role : int {
         Complete = Qt::UserRole + 1,
         IsMe,
+        Text,
     };
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override {
@@ -26,7 +27,8 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    void addMessageByRoom(const QList<tcc::model::Message> &msgs);
+    void addMsgsByRoom(const QList<Message> &msgs);
+    void addMsg(Message msg);
 
     void setCurRoom(u64 new_cur_room) {
         if (cur_room_id_ == new_cur_room) return;
@@ -34,6 +36,10 @@ public:
         cur_room_id_ = new_cur_room;
         endResetModel();
     }
+
+protected:
+    // **4. 实现 roleNames，这是连接 C++ 角色和 QML 属性的关键**
+    QHash<int, QByteArray> roleNames() const override;
 
 private:
     QHash<u64, QList<tcc::model::Message>> messages_;

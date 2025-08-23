@@ -3,6 +3,8 @@
 
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
+#include <QUrl>
+#include <QQmlContext>
 
 #include "net/net_manager.h"
 #include "model/user.h"
@@ -10,6 +12,7 @@
 #include "model/room_delegate.h"
 #include "model/message_model.h"
 #include "model/message.h"
+#include "ui/chat_msg_edit.h"
 
 using NetManager = tcc::net::NetManager;
 
@@ -33,6 +36,8 @@ MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), cur_user_{user} {
     ui->setupUi(this);
 
+    connect(ui->chat_msg_edit_, &ChatMsgEdit::ctrlEnterPressed, this,
+            &MainWindow::onMsgSendRequired);
     connect(&NetManager::get(), &NetManager::queryRoomsResp, this, &MainWindow::onQueriedRooms);
 
     // connect(ui->logout_button, &QPushButton::clicked, this, &MainWindow::logoutRequest);
@@ -52,11 +57,21 @@ MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
                     selectedIdx.data(static_cast<int>(RoomModel::Role::Complete)).value<Room>();
                 qDebug() << "选中:" << room.name;
                 // NetManager::get().fetch_chat_messages(room.id, 50);
-                chat_room_mgr_->setCurRoom(room.id);
+                chat_room_mgr_->setCurRoom(room.id, static_cast<Room::Type>(room.type));
             });
+    ui->room_list_view_->setMinimumWidth(60);
+    ui->more_options_button_->setFixedSize(30, 30);
 
-    ui->chat_box_view_->setModel(chat_room_mgr_->messageModel());
-    ui->chat_box_view_->setItemDelegate(chat_room_mgr_->messageDelegate());
+    // ui->username_label_->setText(cur_user_.username);
+
+    ui->chat_msg_edit_->resize(100, 80);
+
+    ui->chat_box_widget_->setMinimumWidth(150);
+    ui->chat_box_widget_->rootContext()->setContextProperty("messageModel",
+                                                            chat_room_mgr_->messageModel());
+    ui->chat_box_widget_->setSource(QUrl("qrc:/qml/chat_box_widget.qml"));
+    ui->chat_box_widget_->show();
+
 
     NetManager::get().query_rooms();
 }
@@ -64,11 +79,17 @@ MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::setCurrentUser(User user) {
-    ui->username_label_->setText(user.username);
+    // ui->username_label_->setText(user.username);
     cur_user_ = user;
 }
 
 void MainWindow::onLogout() { emit logoutRequest(); }
+
+void MainWindow::onMsgSendRequired(const QString& text) {
+    qDebug() << "msg send required:" << text;
+    NetManager::get().websocketClient()->sendChatMsg(
+        chat_room_mgr_->curRoomId(), chat_room_mgr_->curRoomType() == Room::Type::Private, text);
+}
 
 void MainWindow::onMessagesFetched(std::vector<model::Message> msgs) {
     if (msgs.empty()) {

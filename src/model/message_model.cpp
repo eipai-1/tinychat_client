@@ -1,10 +1,14 @@
 #include "model/message_model.h"
+// #include "net/net_manager.h"
+// #include "net/websocket_client.h"
 
 using Message = tcc::model::Message;
+// using NetManager = tcc::net::NetManager;
 
 namespace tcc::model {
 MessageModel::MessageModel(QObject *parent, u64 cur_user_id)
-    : QAbstractListModel{parent}, cur_user_id_{cur_user_id} {}
+    : QAbstractListModel{parent}, cur_user_id_{cur_user_id} {
+}
 
 QVariant MessageModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid()) {
@@ -28,10 +32,23 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const {
         return message.sender_id == cur_user_id_;
     }
 
+    if (role == static_cast<int>(Role::Text)) {
+        return message.content;
+    }
+
     return QVariant();
 }
 
-void MessageModel::addMessageByRoom(const QList<Message> &msgs) {
+QHash<int, QByteArray> MessageModel::roleNames() const {
+    QHash<int, QByteArray> roles;
+    roles[Qt::DisplayRole] = "display";
+    roles[static_cast<int>(Role::Text)] = "msgText";
+    roles[static_cast<int>(Role::Complete)] = "messageObject";
+    roles[static_cast<int>(Role::IsMe)] = "isMe";
+    return roles;
+}
+
+void MessageModel::addMsgsByRoom(const QList<Message> &msgs) {
     if (msgs.empty()) {
         return;
     }
@@ -59,5 +76,16 @@ void MessageModel::addMessageByRoom(const QList<Message> &msgs) {
     } else {
         messages_[room_id].append(msgs);
     }
+}
+void MessageModel::addMsg(Message msg) {
+    if (msg.room_id != cur_room_id_) {
+        messages_[msg.room_id].append(msg);
+        return;
+    }
+    int firstRowToInsert = messages_[cur_room_id_].size();
+    int lastRowToInsert = firstRowToInsert;
+    beginInsertRows(QModelIndex(), firstRowToInsert, lastRowToInsert);
+    messages_[cur_room_id_].append(msg);
+    endInsertRows();
 }
 }  // namespace tcc::model
