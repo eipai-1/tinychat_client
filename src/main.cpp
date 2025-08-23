@@ -2,7 +2,6 @@
 #include <QLocale>
 #include <QTranslator>
 
-#include "model/room.h"
 #include "core/tinychat_client.h"
 
 int main(int argc, char *argv[]) {
@@ -17,8 +16,6 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-
-    qRegisterMetaType<tcc::model::Room>();
 
     tcc::core::TinychatClient client;
     client.run();

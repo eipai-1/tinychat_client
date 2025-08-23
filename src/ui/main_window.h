@@ -7,6 +7,8 @@
 #include <QStyledItemDelegate>
 
 #include "model/user.h"
+#include "model/room.h"
+#include "service/chat_room_manager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -14,12 +16,12 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-#include "model/room.h"
-
 namespace tcc {
 namespace model {
 class RoomModel;
 class RoomDelegate;
+class MessageModel;
+class MessageDelegate;
 }  // namespace model
 
 namespace ui {
@@ -29,12 +31,15 @@ class MainWindow : public QMainWindow {
 
 public:
     MainWindow(QWidget* parent = nullptr);
+    MainWindow(const tcc::model::User& user, QWidget* parent = nullptr);
     ~MainWindow();
     void setCurrentUser(model::User user);
 
 private slots:
     void onLogout();
-    void onQueriedRooms(std::vector<model::Room> rooms);
+    void onQueriedRooms(std::vector<tcc::model::Room> rooms);
+    void onMessagesFetched(std::vector<tcc::model::Message> msgs);
+    void onMsgSendRequired(const QString& text);
 
 signals:
     void logoutRequest();
@@ -44,6 +49,10 @@ private:
     model::User cur_user_;
     model::RoomModel* room_model_;
     model::RoomDelegate* room_delegate_;
+    model::MessageModel* message_model_;
+    model::MessageDelegate* message_delegate_;
+    service::ChatRoomManager* chat_room_mgr_;
+    QString test_text;
 };
 
 }  // namespace ui

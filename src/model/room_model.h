@@ -13,8 +13,8 @@ class RoomModel : public QAbstractListModel {
 public:
     explicit RoomModel(QObject *parent = nullptr);
 
-    enum Role {
-        RoomRole = Qt::UserRole + 1,
+    enum class Role : int {
+        Complete = Qt::UserRole + 1,
     };
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override {
@@ -27,6 +27,8 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     void addRoom(const tcc::model::Room &room);
+
+    QList<tcc::model::Room> rooms() const { return rooms_; }
 
 private:
     QList<tcc::model::Room> rooms_;

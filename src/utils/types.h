@@ -4,8 +4,10 @@
 #include <cstdint>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QList>
 
 using u64 = std::uint64_t;
+constexpr u64 U64_MAX = std::numeric_limits<u64>::max();
 
 template <typename T>
 static std::vector<T> fromJsonArray(const QJsonArray& ja) {
@@ -17,4 +19,14 @@ static std::vector<T> fromJsonArray(const QJsonArray& ja) {
     return result;
 }
 
-#endif // TYPES_H
+template <typename T>
+static QList<T> jsonArrayToQList(const QJsonArray& ja) {
+    QList<T> result;
+    result.reserve(ja.size());
+    for (const auto& jo : ja) {
+        result.append(T::fromJson(jo.toObject()));
+    }
+    return result;
+}
+
+#endif  // TYPES_H

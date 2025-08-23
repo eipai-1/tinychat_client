@@ -31,6 +31,12 @@ struct Room {
         room.created_at = json["created_at"].toString();
         return room;
     }
+
+    enum class Type : int {
+        Group = 1,
+        Private = 2,
+        Invalid = 999,
+    };
 };
 }  // namespace model
 }  // namespace tcc
