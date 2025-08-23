@@ -172,25 +172,36 @@ void NetManager::fetchResouce(ResType type, const QString& res_url, const QStrin
 
     file_ = new QFile(savePath, this);
     if (!file_->open(QIODevice::WriteOnly)) {
-        qWarning() << "Could not open file for writing. savePath:"
-                   << savePath << " ErrorMsg:" << file_->errorString();
+        qWarning() << "Could not open file for writing. savePath:" << savePath
+                   << " ErrorMsg:" << file_->errorString();
         reply->abort();
         delete file_;
         file_ = nullptr;
         return;
     }
 
-    connect(reply, &QNetworkReply::finished, this, [this, type, reply]() {
-        if (file_) {
-            file_->write(reply->readAll());
-            switch (type) {
-                case ResType::CurUserAvatar:
-                    qDebug() << "avatar fetched";
-                    emit curUserAvatarFetched();
-                    break;
-                default:
-                    qWarning() << "Unknown ResType in fetchResource";
+    connect(reply, &QNetworkReply::finished, this, [this, res_url, type, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            int status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            if (status_code == 200) {
+                if (file_) {
+                    file_->write(reply->readAll());
+                    switch (type) {
+                        case ResType::CurUserAvatar:
+                            qDebug() << "avatar fetched";
+                            emit curUserAvatarFetched(true);
+                            break;
+                        default:
+                            qWarning() << "Unknown ResType in fetchResource";
+                    }
+                }
+            } else {
+                emit curUserAvatarFetched(false);
             }
+        } else {
+            qDebug() << "Error in NetManager::fetchResouce:" << reply->errorString();
+            qDebug() << "Response body (if any):" << reply->readAll();
+            emit curUserAvatarFetched(false);
         }
         reply->deleteLater();
     });

@@ -14,7 +14,6 @@
 namespace tcc::service {
 class ChatRoomManager : public QObject {
     Q_OBJECT
-
 public:
     explicit ChatRoomManager(QObject* parent = nullptr);
     explicit ChatRoomManager(QObject* parent, u64 cur_user_id);

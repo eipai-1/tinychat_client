@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>qml/chat_box_widget.qml</file>
         <file>icons/more-options-icon.jpg</file>
+        <file>icons/default_avatar.png</file>
+        <file>icons/error-icon.png</file>
     </qresource>
 </RCC>

@@ -36,6 +36,11 @@ public:
         UserAvatar = 2,
     };
 
+    enum class ResResp : int {
+        Success = 0,
+        NotFound = 1,
+    };
+
     void setToken(const QString& token) { token_ = token; }
     void login(const tcc::model::LoginRequest& login_req);
     void query_rooms();
@@ -59,7 +64,7 @@ signals:
     void loginResp(tcc::model::LoginResp resp);
     void queryRoomsResp(std::vector<tcc::model::Room> rooms);
     void messagesFetched(const QList<tcc::model::Message>& msgs);
-    void curUserAvatarFetched();
+    void curUserAvatarFetched(bool success);
 };
 
 }  // namespace net

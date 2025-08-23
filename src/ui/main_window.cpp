@@ -102,18 +102,17 @@ void MainWindow::onMsgSendRequired(const QString& text) {
         chat_room_mgr_->curRoomId(), chat_room_mgr_->curRoomType() == Room::Type::Private, text);
 }
 
-void MainWindow::onCurUserAvatarFetched() {
+void MainWindow::onCurUserAvatarFetched(bool success) {
+    if (!success) {
+        ui->avatar_label_->setPixmap(
+            QPixmap("://icons/error-icon.png")
+                .scaled(45, 45, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        return;
+    }
     QString save_path =
         utils::working_dir() + CUR_USER_AVATAR_PATH + QString::number(cur_user_.id) + ".jpg";
     ui->avatar_label_->setPixmap(
         QPixmap(save_path).scaled(45, 45, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-}
-
-void MainWindow::onMessagesFetched(std::vector<model::Message> msgs) {
-    if (msgs.empty()) {
-        return;
-    }
-    u64 room_id = msgs[0].room_id;
 }
 
 void MainWindow::onQueriedRooms(std::vector<Room> rooms) {

@@ -9,6 +9,7 @@
 #include "model/user.h"
 #include "model/room.h"
 #include "service/chat_room_manager.h"
+#include "net/net_manager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,9 +39,8 @@ public:
 private slots:
     void onLogout();
     void onQueriedRooms(std::vector<tcc::model::Room> rooms);
-    void onMessagesFetched(std::vector<tcc::model::Message> msgs);
     void onMsgSendRequired(const QString& text);
-    void onCurUserAvatarFetched();
+    void onCurUserAvatarFetched(bool success);
 
 signals:
     void logoutRequest();
