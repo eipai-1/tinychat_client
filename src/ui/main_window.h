@@ -5,11 +5,13 @@
 #include <QMainWindow>
 #include <QAbstractListModel>
 #include <QStyledItemDelegate>
+#include <QPropertyAnimation>
 
 #include "model/user.h"
 #include "model/room.h"
 #include "service/chat_room_manager.h"
 #include "net/net_manager.h"
+#include "ui/navigation_drawer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -36,16 +38,24 @@ public:
     ~MainWindow();
     void setCurrentUser(model::User user);
 
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+
 private slots:
     void onLogout();
     void onQueriedRooms(std::vector<tcc::model::Room> rooms);
     void onMsgSendRequired(const QString& text);
     void onCurUserAvatarFetched(bool success);
 
+    // ui slots
+    void toggleNavDrawer();
+
 signals:
     void logoutRequest();
 
 private:
+    static constexpr const char* CUR_USER_AVATAR_PATH = "/assets/images/users/avatar/";
+
     Ui::MainWindow* ui;
     model::User cur_user_;
     model::RoomModel* room_model_;
@@ -55,7 +65,9 @@ private:
     service::ChatRoomManager* chat_room_mgr_;
     QString test_text;
 
-    static constexpr const char* CUR_USER_AVATAR_PATH = "/assets/images/users/avatar/";
+    // ui
+    NavigationDrawer* m_nav_drawer;
+    QPropertyAnimation* m_nav_drawer_anim;
 };
 
 }  // namespace ui

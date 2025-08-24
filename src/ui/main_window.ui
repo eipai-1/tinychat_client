@@ -31,7 +31,7 @@
            <number>5</number>
           </property>
           <item>
-           <widget class="QPushButton" name="more_options_button_">
+           <widget class="QPushButton" name="m_toggle_nav_drawer_btn">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -121,6 +121,13 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="toggle">
+            <property name="text">
+             <string>收起</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">

@@ -61,7 +61,6 @@ MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
                 chat_room_mgr_->setCurRoom(room.id, static_cast<Room::Type>(room.type));
             });
     ui->room_list_view_->setMinimumWidth(60);
-    ui->more_options_button_->setFixedSize(30, 30);
 
     // ui->username_label_->setText(cur_user_.username);
 
@@ -75,6 +74,14 @@ MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
 
     connect(&NetManager::get(), &NetManager::curUserAvatarFetched, this,
             &MainWindow::onCurUserAvatarFetched);
+
+    // ui
+    m_nav_drawer = new NavigationDrawer(this);
+    m_nav_drawer_anim = new QPropertyAnimation(m_nav_drawer, "expansionProgress", this);
+    m_nav_drawer_anim->setDuration(250);
+    m_nav_drawer_anim->setEasingCurve(QEasingCurve::OutCubic);
+    connect(ui->m_toggle_nav_drawer_btn, &QPushButton::clicked, this, &MainWindow::toggleNavDrawer);
+    connect(ui->toggle, &QPushButton::clicked, this, &MainWindow::toggleNavDrawer);
 
     // current user avatar request path
     QString cur_user_avatar_rp = "/images/users/avatar/" + QString::number(cur_user_.id) + ".jpg";
@@ -92,6 +99,11 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::setCurrentUser(User user) {
     // ui->username_label_->setText(user.username);
     cur_user_ = user;
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event) {
+    QMainWindow::resizeEvent(event);
+    m_nav_drawer->adjustSize();
 }
 
 void MainWindow::onLogout() { emit logoutRequest(); }
@@ -113,6 +125,22 @@ void MainWindow::onCurUserAvatarFetched(bool success) {
         utils::working_dir() + CUR_USER_AVATAR_PATH + QString::number(cur_user_.id) + ".jpg";
     ui->avatar_label_->setPixmap(
         QPixmap(save_path).scaled(45, 45, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+}
+
+void MainWindow::toggleNavDrawer() {
+    if (m_nav_drawer->isExpanded()) {
+        m_nav_drawer->setExpanded(false);
+        m_nav_drawer_anim->stop();
+        m_nav_drawer_anim->setStartValue(m_nav_drawer->expansionProgress());
+        m_nav_drawer_anim->setEndValue(0.0);
+        m_nav_drawer_anim->start();
+    } else {
+        m_nav_drawer->setExpanded(true);
+        m_nav_drawer_anim->stop();
+        m_nav_drawer_anim->setStartValue(m_nav_drawer->expansionProgress());
+        m_nav_drawer_anim->setEndValue(1.0);
+        m_nav_drawer_anim->start();
+    }
 }
 
 void MainWindow::onQueriedRooms(std::vector<Room> rooms) {

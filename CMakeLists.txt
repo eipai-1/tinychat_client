@@ -65,6 +65,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/service/chat_room_manager.h src/service/chat_room_manager.cpp
         src/net/websocket_client.h src/net/websocket_client.cpp
         src/ui/chat_msg_edit.h src/ui/chat_msg_edit.cpp
+        src/ui/navigation_drawer.h src/ui/navigation_drawer.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET tinychat_client APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
