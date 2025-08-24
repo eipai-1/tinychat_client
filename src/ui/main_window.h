@@ -49,6 +49,8 @@ private slots:
 
     // ui slots
     void toggleNavDrawer();
+    void expandNavDrawer();
+    void collapseNavDrawer();
 
 signals:
     void logoutRequest();

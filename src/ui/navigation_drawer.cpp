@@ -5,8 +5,8 @@
 #include "navigation_drawer.h"
 
 NavigationDrawer::NavigationDrawer(QWidget *parent) : QWidget{parent} {
-    setMinimumWidth(MIN_WIDTH);
-    setGeometry(parent->width() * 0.4, 0, parent->width() * 0.4, parent->height());
+    //setMinimumWidth(MIN_WIDTH);
+    setGeometry(-parent->width() * 0.4, 0, parent->width() * 0.4, parent->height());
     QPalette pal = palette();
     pal.setColor(QPalette::Window, QColor(240, 240, 240));
     setPalette(pal);

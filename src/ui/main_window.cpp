@@ -78,10 +78,11 @@ MainWindow::MainWindow(const tcc::model::User& user, QWidget* parent)
     // ui
     m_nav_drawer = new NavigationDrawer(this);
     m_nav_drawer_anim = new QPropertyAnimation(m_nav_drawer, "expansionProgress", this);
-    m_nav_drawer_anim->setDuration(250);
+    m_nav_drawer_anim->setDuration(NavigationDrawer::ANIME_MS);
     m_nav_drawer_anim->setEasingCurve(QEasingCurve::OutCubic);
     connect(ui->m_toggle_nav_drawer_btn, &QPushButton::clicked, this, &MainWindow::toggleNavDrawer);
-    connect(ui->toggle, &QPushButton::clicked, this, &MainWindow::toggleNavDrawer);
+    connect(m_nav_drawer, &NavigationDrawer::requestCollapse, this, &MainWindow::collapseNavDrawer);
+    connect(m_nav_drawer, &NavigationDrawer::requestExpand, this, &MainWindow::expandNavDrawer);
 
     // current user avatar request path
     QString cur_user_avatar_rp = "/images/users/avatar/" + QString::number(cur_user_.id) + ".jpg";
@@ -129,16 +130,28 @@ void MainWindow::onCurUserAvatarFetched(bool success) {
 
 void MainWindow::toggleNavDrawer() {
     if (m_nav_drawer->isExpanded()) {
-        m_nav_drawer->setExpanded(false);
-        m_nav_drawer_anim->stop();
-        m_nav_drawer_anim->setStartValue(m_nav_drawer->expansionProgress());
-        m_nav_drawer_anim->setEndValue(0.0);
-        m_nav_drawer_anim->start();
+        collapseNavDrawer();
     } else {
+        expandNavDrawer();
+    }
+}
+
+void MainWindow::expandNavDrawer() {
+    if (!m_nav_drawer->isExpanded()) {
         m_nav_drawer->setExpanded(true);
         m_nav_drawer_anim->stop();
         m_nav_drawer_anim->setStartValue(m_nav_drawer->expansionProgress());
         m_nav_drawer_anim->setEndValue(1.0);
+        m_nav_drawer_anim->start();
+    }
+}
+
+void MainWindow::collapseNavDrawer() {
+    if (m_nav_drawer->isExpanded()) {
+        m_nav_drawer->setExpanded(false);
+        m_nav_drawer_anim->stop();
+        m_nav_drawer_anim->setStartValue(m_nav_drawer->expansionProgress());
+        m_nav_drawer_anim->setEndValue(0.0);
         m_nav_drawer_anim->start();
     }
 }
